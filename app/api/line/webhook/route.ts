@@ -42,17 +42,27 @@ export async function POST(req: NextRequest) {
   // console.log("bodyText")
   const signature = req.headers.get('x-line-signature') || ''
 
-  if (!verifySignature(bodyText, signature)) {
-    return NextResponse.json(
-      { message: 'Invalid signature' },
-      { status: 401 }
-    )
+  const isValid = verifySignature(bodyText, signature)
+
+  if (!isValid) {
+    console.warn('LINE webhook: invalid signature')
+    // ❗ ห้าม return 401
+    return NextResponse.json({ ok: true })
   }
 
-  const body = JSON.parse(bodyText)
-  // console.log("body")
+  // 👇 ต่อจากนี้ค่อย parse
+  let body: any
+  try {
+    body = bodyText ? JSON.parse(bodyText) : {}
+  } catch {
+    return NextResponse.json({ ok: true })
+  }
   const events = body.events ?? []
   // console.log("events",events)
+  if (!events.length) {
+    // LINE Verify จะเข้าจุดนี้
+    return NextResponse.json({ ok: true })
+  }
 
   for (const event of events) {
     if (event.type !== 'message') continue
@@ -76,8 +86,8 @@ export async function POST(req: NextRequest) {
         .single()
 
       if (error) {
-        console.error('insert customer error:', error)
-        throw error
+        console.error(error)
+        return NextResponse.json({ ok: true })
       }
 
       customer = newCustomer
@@ -111,9 +121,10 @@ export async function POST(req: NextRequest) {
         .single()
 
       if (error) {
-        console.error('insert customer error:', error)
-        throw error
+        console.error(error)
+        return NextResponse.json({ ok: true })
       }
+
 
       conversation = newConversation
     }
@@ -142,9 +153,10 @@ export async function POST(req: NextRequest) {
     })
 
     if (error) {
-      console.error('insert message error:', error)
-      throw error
+      console.error(error)
+      return NextResponse.json({ ok: true })
     }
+
 
     /* ===================== UPDATE CONVERSATION ===================== */
     await supabase
