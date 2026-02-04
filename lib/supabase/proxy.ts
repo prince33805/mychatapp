@@ -3,6 +3,18 @@ import { NextResponse, type NextRequest } from "next/server";
 import { hasEnvVars } from "../utils";
 
 export async function updateSession(request: NextRequest) {
+
+  const pathname = request.nextUrl.pathname;
+
+  // 🚨 BYPASS LINE WEBHOOK
+  if (pathname.startsWith("/api/line/webhook")) {
+    return NextResponse.next({ request });
+  }
+
+  if (pathname.startsWith("/api/admin")) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });
