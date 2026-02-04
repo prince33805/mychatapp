@@ -8,11 +8,11 @@ export async function updateSession(request: NextRequest) {
 
   // 🚨 BYPASS LINE WEBHOOK
   if (pathname.startsWith("/api/line/webhook")) {
-    return NextResponse.next({ request });
+    return NextResponse.next();
   }
 
   if (pathname.startsWith("/api/admin")) {
-    return NextResponse.next({ request });
+    return NextResponse.next();
   }
 
   let supabaseResponse = NextResponse.next({
