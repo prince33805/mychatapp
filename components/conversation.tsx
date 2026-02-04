@@ -17,8 +17,8 @@ type ConversationProps = {
 };
 
 /* ===================== CONSTANT ===================== */
-const INITIAL_LIMIT = 30;
-const LOAD_MORE_LIMIT = 20;
+const INITIAL_LIMIT = 10;
+const LOAD_MORE_LIMIT = 10;
 const BOTTOM_THRESHOLD = 50;
 
 /* ===================== COMPONENT ===================== */
@@ -227,17 +227,15 @@ export default function Conversation({ conversationId }: ConversationProps) {
 
   /* ===================== RENDER ===================== */
   return (
-    <main className="flex-1 flex flex-col bg-white dark:bg-background-dark">
-      {/* HEADER */}
+    <>
       <header className="h-14 px-6 flex items-center border-b border-slate-200 dark:border-border-dark">
         <h2 className="text-sm font-bold">Conversation</h2>
       </header>
 
-      {/* MESSAGES */}
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="flex-1 overflow-y-auto p-6 flex flex-col gap-6"
+        className="flex-1 overflow-y-auto p-4 space-y-2"
       >
         {loading && (
           <div className="text-xs text-slate-400">Loading…</div>
@@ -267,7 +265,7 @@ export default function Conversation({ conversationId }: ConversationProps) {
           ) : (
             <div
               key={msg.id}
-              className="flex flex-row-reverse items-end gap-3 max-w-[80%] self-end"
+              className="flex flex-row-reverse items-end gap-3 max-w-[100%] self-end"
             >
               <div className="w-8 h-8 rounded-full bg-primary shrink-0" />
               <div className="flex flex-col items-end">
@@ -314,6 +312,6 @@ export default function Conversation({ conversationId }: ConversationProps) {
           </button>
         </div>
       </div>
-    </main>
+    </>
   );
 }

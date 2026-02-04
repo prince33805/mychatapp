@@ -15,7 +15,7 @@ export default function ChatWindow() {
 
       <div className="h-full w-full max-w-6xl flex gap-4 p-4 min-h-0">
         {/* ===== SIDEBAR ===== */}
-        <aside className="w-72 rounded-lg overflow-y-auto border">
+        <aside className="w-[30%] rounded-lg overflow-y-auto">
           <CustomerList
             onSelect={setActiveConversationId}
             activeConversationId={activeConversationId}
@@ -23,9 +23,9 @@ export default function ChatWindow() {
         </aside>
 
         {/* ===== CHAT WINDOW ===== */}
-        <section className="flex-1 border rounded-lg flex flex-col min-h-0">
+        <div className="w-[70%] h-[600px] bg-white rounded-lg shadow flex flex-col">
           <Conversation conversationId={activeConversationId} />
-        </section>
+        </div>
       </div>
     </div>
   );
